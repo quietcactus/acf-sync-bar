@@ -2,7 +2,7 @@
 /**
  * Plugin Name: ACF Sync Bar
  * Description: Adds an admin bar button that surfaces ACF field groups with pending local-JSON syncs.
- * Version:     1.1.0
+ * Version:     1.1.1
  * Author:      Paperstreet
  * License:     GPL-2.0-or-later
  * Requires PHP: 7.4
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'ACF_SYNC_BAR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ACF_SYNC_BAR_URL', plugin_dir_url( __FILE__ ) );
-define( 'ACF_SYNC_BAR_VERSION', '1.1.0' );
+define( 'ACF_SYNC_BAR_VERSION', '1.1.1' );
 
 require_once ACF_SYNC_BAR_DIR . 'includes/class-acf-sync-bar-detector.php';
 require_once ACF_SYNC_BAR_DIR . 'includes/class-acf-sync-bar-admin-bar.php';
