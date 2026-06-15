@@ -59,8 +59,10 @@ class ACF_Sync_Bar_Ajax {
     acf_update_setting( 'json', false );
 
     foreach ( $target_keys as $target_key ) {
-      $local = acf_get_local_field_group( $target_key );
-      if ( ! is_array( $local ) ) {
+      $local = $this->get_local_with_fields( $target_key );
+
+      // Never import an empty field set — that is the bug that wipes the group.
+      if ( ! is_array( $local ) || empty( $local['fields'] ) ) {
         $failed[] = $target_key;
         continue;
       }
@@ -82,5 +84,43 @@ class ACF_Sync_Bar_Ajax {
       'synced' => $synced,
       'failed' => $failed,
     ] );
+  }
+
+  /**
+   * Resolve a complete local field group, including its nested `fields`.
+   *
+   * acf_get_local_field_group() returns group settings only — ACF stores local
+   * fields separately — so passing its result to acf_import_field_group() deletes
+   * every existing DB field and re-creates nothing. Mirror ACF's native sync by
+   * reading the raw local JSON file (fields nested), falling back to the local
+   * fields store. Returns null when fields cannot be resolved.
+   *
+   * @param string $key Field group key.
+   * @return array|null
+   */
+  private function get_local_with_fields( $key ) {
+    if ( function_exists( 'acf_get_local_json_files' ) ) {
+      $files = acf_get_local_json_files();
+      if ( isset( $files[ $key ] ) && is_readable( $files[ $key ] ) ) {
+        $json = json_decode( file_get_contents( $files[ $key ] ), true );
+        if ( is_array( $json ) && ! empty( $json['fields'] ) ) {
+          return $json;
+        }
+      }
+    }
+
+    $local = acf_get_local_field_group( $key );
+    if ( ! is_array( $local ) ) {
+      return null;
+    }
+
+    if ( empty( $local['fields'] ) && function_exists( 'acf_get_fields' ) ) {
+      $fields = acf_get_fields( $local );
+      if ( is_array( $fields ) ) {
+        $local['fields'] = $fields;
+      }
+    }
+
+    return $local;
   }
 }
