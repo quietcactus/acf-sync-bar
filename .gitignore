@@ -1,0 +1,37 @@
+node_modules/
+**/.npmrc
+
+# AI
+.claude/
+.cursor/
+.planning/
+.references/
+claude/
+docs/
+memory/
+references/
+CLAUDE.md
+DESIGN.md
+
+# IDE
+# .vscode/
+.cursorignore
+.prettierignore
+
+# Wordpress
+sendmail.php
+slice/
+vendor/
+
+# Fonts
+fonts/
+webfonts/
+*.woff
+*.woff2
+*.ttf
+
+# Images
+images/
+*.png
+*.jpg
+*.webp
